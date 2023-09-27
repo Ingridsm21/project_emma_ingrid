@@ -10,7 +10,7 @@
                     "type": "primary_key"
                 },
                 {
-                    "name": "npc",
+                    "name": "npc_id",
                     "datatype": "int"
                 },
                 {
@@ -18,7 +18,7 @@
                     "datatype": "int"
                 },
                 {
-                    "name": "content",
+                    "name": "text",
                     "datatype": "string",
                     "value_source": "dialogues"
                 }
@@ -43,9 +43,8 @@
                     "datatype": "int"
                 },
                 {
-                    "name": "leader",
-                    "datatype": "string",
-                    "value_source": "first_names"
+                    "name": "leader_id",
+                    "datatype": "int"
                 },
                 {
                     "name": "members",
@@ -72,7 +71,7 @@
                     "value_source": "first_names"
                 },
                 {
-                    "name": "firstname",
+                    "name": "last_name",
                     "datatype": "string",
                     "value_source": "last_names"
                 },
@@ -82,7 +81,7 @@
                     "value_source": "class_names"
                 },
                 {
-                    "name": "guild",
+                    "name": "guild_id",
                     "datatype": "string",
                     "value_source": "guild_names"
                 },
@@ -91,7 +90,7 @@
                     "datatype": "datetime"
                 },
                 {
-                    "name": "kingdom",
+                    "name": "kingdom_id",
                     "datatype": "int"
                 },
                 {
@@ -123,12 +122,12 @@
                     "type": "primary_key"
                 },
                 {
-                    "name": "item_name",
+                    "name": "name",
                     "datatype": "string",
                     "value_source": "item_names"
                 },
                 {
-                    "name": "item_type",
+                    "name": "description",
                     "datatype": "string",
                     "value_source": "item_types"
                 },
@@ -156,12 +155,12 @@
                     "type": "primary_key"
                 },
                 {
-                    "name": "enemy_name",
+                    "name": "name",
                     "datatype": "string",
                     "value_source": "enemy_names"
                 },
                 {
-                    "name": "enemy_type",
+                    "name": "type",
                     "datatype": "string",
                     "value_source": "enemy_types"
                 },
@@ -197,7 +196,7 @@
                     "type": "primary_key"
                 },
                 {
-                    "name": "team_name",
+                    "name": "name",
                     "datatype": "string",
                     "value_source": "team_names"
                 },
@@ -206,12 +205,11 @@
                     "datatype": "int"
                 },
                 {
-                    "name": "kingdom",
-                    "datatype": "string",
-                    "value_source": "kingdom_names"
+                    "name": "member_count",
+                    "datatype": "int"
                 },
                 {
-                    "name": "n_members",
+                    "name": "kingdom_id",
                     "datatype": "int"
                 }
             ]
@@ -226,7 +224,7 @@
                     "type": "primary_key"
                 },
                 {
-                    "name": "event_name",
+                    "name": "name",
                     "datatype": "string",
                     "value_source": "event_names"
                 },
@@ -236,7 +234,7 @@
                 },
                 {
                     "name": "event_time",
-                    "datatype": "int"
+                    "datatype": "datetime"
                 }
             ]
         },
@@ -250,22 +248,23 @@
                     "type": "primary_key"
                 },
                 {
-                    "name": "first_name",
+                    "name": "name",
                     "datatype": "string",
                     "value_source": "first_names"
                 },
                 {
-                    "name": "npc_type",
+                    "name": "type",
                     "datatype": "string",
                     "value_source": "npc_types"
                 },
                 {
-                    "name": "dialogue",
-                    "datatype": "string"
-                },
-                {
                     "name": "location",
                     "datatype": "float"
+                },
+                {
+                    "name": "dialogue",
+                    "datatype": "string",
+                    "value_source":"dialogues"
                 },
                 {
                     "name": "quest",
@@ -292,7 +291,7 @@
                     "datatype": "string"
                 },
                 {
-                    "name": "ruler",
+                    "name": "ruler_id",
                     "datatype": "int"
                 },
                 {
@@ -319,7 +318,7 @@
                     "datatype": "string"
                 },
                 {
-                    "name": "kingdom",
+                    "name": "kingdom_id",
                     "datatype": "int"
                 }
             ]
@@ -334,11 +333,11 @@
                     "type": "primary_key"
                 },
                 {
-                    "name": "player",
+                    "name": "player_id",
                     "datatype": "int"
                 },
                 {
-                    "name": "enemy",
+                    "name": "enemy_id",
                     "datatype": "int"
                 },
                 {
@@ -346,7 +345,7 @@
                     "datatype": "int"
                 },
                 {
-                    "name": "winner",
+                    "name": "winner_id",
                     "datatype": "int"
                 }
             ]
@@ -361,11 +360,11 @@
                     "type": "primary_key"
                 },
                 {
-                    "name": "sender",
+                    "name": "sender_id",
                     "datatype": "int"
                 },
                 {
-                    "name": "receiver",
+                    "name": "receiver_id",
                     "datatype": "int"
                 },
                 {
@@ -374,11 +373,11 @@
                 },
                 {
                     "name": "description",
-                    "datatype": "int"
+                    "datatype": "string"
                 },
                 {
                     "name": "timestamp",
-                    "datatype": "int"
+                    "datatype": "timestamp"
                 }
             ]
         },
@@ -404,7 +403,7 @@
                     "datatype": "string"
                 },
                 {
-                    "name": "player",
+                    "name": "player_id",
                     "datatype": "int"
                 },
                 {
