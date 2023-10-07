@@ -296,7 +296,7 @@ last_used_ids = {}
 # Dictionary to store generated records for each entity type
 all_generated_records = {}
 # Define the entity types
-entity_types = ["player", "event", "item", "enemy", "team", "npc", "guild", "team", "dialogue"] #,"kingdom","ruler","combat","transaction","quest"]
+entity_types = ["player", "event", "item", "enemy", "team", "npc", "guild", "team", "dialogue","kingdom","ruler","combat","transaction","quest"]
 # Collect the types from entity definitions
 defined_entity_types = set(entity['type'] for entity in entity_definitions)
 

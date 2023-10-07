@@ -1,6 +1,13 @@
 from sqlalchemy import create_engine, ForeignKey, Column, String, Integer, CHAR 
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
+from sqlalchemy import create_engine
+from sqlalchemy.exc import IntegrityError
+from sqlalchemy.orm import sessionmaker
+import sys
+
+engine = create_engine("mysql://root:password@localhost:3306/Atheria") #Cambiar
+Base = declarative_base()
 
 class Dialogue(Base):
     __tablename__ = "dialogue"
@@ -253,5 +260,27 @@ def __init__(self,id,name,description,reward,player_id,difficulty):
     self.player_id = player_id
     self.difficulty = difficulty
 
-def __repr__(self):
-    return f"({self.id}) {self.npc_id} ({self.player_id} {self.text})"
+Base.metadata.create_all(engine)
+Session = sessionmaker(bind=engine)
+session = Session()
+
+file1 = open('generated_entities')
+Lines = file1.readlines()
+
+entities = ["player", "event", "item", "enemy", "team", "npc", "guild", "team", "dialogue","kingdom","ruler","combat","transaction","quest"]
+currentOb = []
+
+def createObj(currentObj):
+    currentObj[0] = currentObj[0].replace('-', '').replace(' ', '').replace('\n', '')
+    if "questions" in currentObj[0]:
+        currentObj[0] = "questions"
+        print(currentObj)
+
+    session.add(str_to_class(currentObj[0])(*currentObj[1:]))
+    try:
+        session.commit()
+    except IntegrityError as err:
+        session.rollback()
+        return print('error')
+    return currentObj
+
