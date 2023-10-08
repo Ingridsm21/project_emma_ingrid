@@ -1,12 +1,12 @@
-from sqlalchemy import create_engine, ForeignKey, Column, String, Integer, CHAR 
+from sqlalchemy import create_engine, ForeignKey, Column, String, Integer, Boolean, DateTime 
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
-from sqlalchemy import create_engine
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import sessionmaker
+from datetime import datetime
 import sys
 
-engine = create_engine("mysql://root:password@localhost:3306/Atheria") #Cambiar
+
 Base = declarative_base()
 
 class Dialogue(Base):
@@ -17,12 +17,12 @@ class Dialogue(Base):
     player_id = Column("player_id", Integer)
     text = Column("text", String )
 
+    def __init__(self,id,npc_id,player_id,text):
+        self.id = id
+        self.npc_id = npc_id
+        self.player_id = player_id
+        self.text = text
 
-def __init__(self,id,npc_id,player_id,text):
-    self.id = id
-    self.npc_id = npc_id
-    self.player_id = player_id
-    self.text = text
 
 class Guild(Base):
     __tablename__ = "guild"
@@ -35,13 +35,13 @@ class Guild(Base):
     founded_year = Column("founded_year", Integer )
 
 
-def __init__(self,id,name,max_members,leader_id,members,founded_year):
-    self.id = id
-    self.name = name
-    self.max_members = max_members
-    self.leader_id = leader_id
-    self.members = members
-    self.founded_year = founded_year
+    def __init__(self,id,name,max_members,leader_id,members,founded_year):
+        self.id = id
+        self.name = name
+        self.max_members = max_members
+        self.leader_id = leader_id
+        self.members = members
+        self.founded_year = founded_year
 
 
 class Player(Base):
@@ -52,7 +52,7 @@ class Player(Base):
     last_name = Column("last_name", String)
     class_name = Column("class_name", String )
     guild_id = Column("guild_id", String)
-    #last_login = Column("last_login", Datetime)
+    last_login = Column("last_login", DateTime)
     kingdom_id = Column("kingdom_id",Integer)
     experience = Column("experience",Integer)
     health = Column("health",Integer)
@@ -60,18 +60,18 @@ class Player(Base):
     gold = Column("gold",Integer)
 
 
-def __init__(self,id,first_name,last_name,class_name,guild_id,last_login,kingdom_id,experience,health,level,gold):
-    self.id = id
-    self.first_name = first_name
-    self.last_name = last_name
-    self.class_name = class_name
-    self.guild_id = guild_id
-    #self.last_login = last_login
-    self.kingdom_id = kingdom_id
-    self.experience = experience
-    self.health = health
-    self.level = level
-    self.gold = gold
+    def __init__(self,id,first_name,last_name,class_name,guild_id,last_login,kingdom_id,experience,health,level,gold):
+        self.id = id
+        self.first_name = first_name
+        self.last_name = last_name
+        self.class_name = class_name
+        self.guild_id = guild_id
+        self.last_login = last_login
+        self.kingdom_id = kingdom_id
+        self.experience = experience
+        self.health = health
+        self.level = level
+        self.gold = gold
 
 
 class Item(Base):
@@ -82,15 +82,15 @@ class Item(Base):
     description = Column("description",String)
     price = Column("price",Integer)
     required_level = Column("required_level",Integer)
-    consumable = Column("consumable",bool) #Check boolean
+    consumable = Column("consumable", Boolean) 
 
-def __init__(self,id,name,description,price,required_level,consumable):
-    self.id = id
-    self.name = name 
-    self.description = description
-    self.price = price
-    self.required_lelvel = required_level
-    self.consumable = consumable
+    def __init__(self,id,name,description,price,required_level,consumable):
+        self.id = id
+        self.name = name 
+        self.description = description
+        self.price = price
+        self.required_lelvel = required_level
+        self.consumable = consumable
 
 
 class Enemy(Base):
@@ -105,15 +105,15 @@ class Enemy(Base):
     defense = Column("defense",Integer)
     drop_items = Column("drop_items",String)
 
-def __init__(self,id,name,type,level,health,attack,defense,drop_items):
-    self.id = id
-    self.name = name 
-    self.type = type
-    self.level = level
-    self.health = health
-    self.attack = attack
-    self.defense = defense
-    self.drop_items = drop_items
+    def __init__(self,id,name,type,level,health,attack,defense,drop_items):
+        self.id = id
+        self.name = name 
+        self.type = type
+        self.level = level
+        self.health = health
+        self.attack = attack
+        self.defense = defense
+        self.drop_items = drop_items
 
 
 class Team(Base):
@@ -125,12 +125,12 @@ class Team(Base):
     member_count = Column("member_count",Integer)
     kingdom_id = Column("kingdom_id",Integer)
 
-def __init__(self,id,name,leader_id,memeber_count,kingdom_id):
-    self.id = id
-    self.name = name 
-    self.leader_id = leader_id
-    self.member_count = memeber_count
-    self.kingdom_id = kingdom_id
+    def __init__(self,id,name,leader_id,memeber_count,kingdom_id):
+        self.id = id
+        self.name = name 
+        self.leader_id = leader_id
+        self.member_count = memeber_count
+        self.kingdom_id = kingdom_id
 
 
 class Event(Base):
@@ -139,13 +139,13 @@ class Event(Base):
     id = Column("id", Integer, primary_key = True)
     name = Column("name",String)
     description = Column("description",String)
-    #event_time = Column("event_time",datetime)
+    event_time = Column("event_time", DateTime)
 
-def __init__(self,id,name,description,event_time):
-    self.id = id
-    self.name = name 
-    self.description = description
-    #self.event_time = event_time
+    def __init__(self,id,name,description,event_time):
+        self.id = id
+        self.name = name 
+        self.description = description
+        self.event_time = event_time
 
 
 
@@ -159,13 +159,13 @@ class NPC(Base):
     dialogue = Column("dialogue",String)
     quest = Column("quest",Integer)
 
-def __init__(self,id,name,type,location,dialogue,quest):
-    self.id = id
-    self.name = name 
-    self.type = type
-    self.location = location
-    self.dialogue = dialogue
-    self.quest = quest
+    def __init__(self,id,name,type,location,dialogue,quest):
+        self.id = id
+        self.name = name 
+        self.type = type
+        self.location = location
+        self.dialogue = dialogue
+        self.quest = quest
 
 
 
@@ -178,12 +178,12 @@ class Kingdom(Base):
     ruler_id = Column("ruler_id",Integer)
     population = Column("population",Integer)
 
-def __init__(self,id,name,description,ruler_id,population):
-    self.id = id
-    self.name = name 
-    self.description = description
-    self.ruler_id = ruler_id
-    self.population = population
+    def __init__(self,id,name,description,ruler_id,population):
+        self.id = id
+        self.name = name 
+        self.description = description
+        self.ruler_id = ruler_id
+        self.population = population
 
 
 
@@ -195,11 +195,11 @@ class Ruler(Base):
     title = Column("title",String)
     kingdom_id = Column("kingdom_id",Integer)
 
-def __init__(self,id,name,title,kingdom_id):
-    self.id = id
-    self.name = name 
-    self.title = title
-    self.kingdom_id = kingdom_id
+    def __init__(self,id,name,title,kingdom_id):
+        self.id = id
+        self.name = name 
+        self.title = title
+        self.kingdom_id = kingdom_id
 
 
 
@@ -212,12 +212,12 @@ class Combat(Base):
     turns = Column("turns",Integer)
     winner_id = Column("winner_id",Integer)
 
-def __init__(self,id,player_id,enemy_id,turns,winner_id):
-    self.id = id
-    self.player_id = player_id
-    self.enemy_id = enemy_id
-    self.turns = turns
-    self.winner_id = winner_id
+    def __init__(self,id,player_id,enemy_id,turns,winner_id):
+        self.id = id
+        self.player_id = player_id
+        self.enemy_id = enemy_id
+        self.turns = turns
+        self.winner_id = winner_id
 
 
 
@@ -229,15 +229,15 @@ class Transaction(Base):
     receiver_id = Column("receiver_id",Integer)
     amount = Column("amount",Integer)
     description = Column("description",String)
-    #timestamp =Column("timestamp")
+    timestamp = Column("timestamp", DateTime, default = datetime.uctnow)
 
-def __init__(self,id,sender_id,reciever_id,amount,description,timestamp):
-    self.id = id
-    self.sender_id = sender_id
-    self.receiver_id = reciever_id
-    self.amount = amount
-    self.description = description
-    #self.timestamp = timestamp
+    def __init__(self,id,sender_id,reciever_id,amount,description,timestamp):
+        self.id = id
+        self.sender_id = sender_id
+        self.receiver_id = reciever_id
+        self.amount = amount
+        self.description = description
+        self.timestamp = timestamp
 
 
 
@@ -252,31 +252,37 @@ class Quest(Base):
     difficulty = Column("difficulty",Integer)
 
 
-def __init__(self,id,name,description,reward,player_id,difficulty):
-    self.id = id
-    self.sname = name
-    self.description = description
-    self.reward = reward
-    self.player_id = player_id
-    self.difficulty = difficulty
+    def __init__(self,id,name,description,reward,player_id,difficulty):
+        self.id = id
+        self.sname = name
+        self.description = description
+        self.reward = reward
+        self.player_id = player_id
+        self.difficulty = difficulty
 
-Base.metadata.create_all(engine)
-Session = sessionmaker(bind=engine)
+engine = create_engine("mysql:///") #Cambiar
+Base.metadata.create_all(bind = engine)
+
+Session = sessionmaker(bind = engine)
 session = Session()
 
-file1 = open('generated_entities')
-Lines = file1.readlines()
+file = open('generated_entities')
+Lines = file.readlines()
 
 entities = ["player", "event", "item", "enemy", "team", "npc", "guild", "team", "dialogue","kingdom","ruler","combat","transaction","quest"]
-currentOb = []
+currentObj = []
 
-def createObj(currentObj):
+def class_access(classname):
+    return getattr(sys.modules[__name__], classname)
+
+
+def objectcreation(currentObj):
     currentObj[0] = currentObj[0].replace('-', '').replace(' ', '').replace('\n', '')
     if "questions" in currentObj[0]:
         currentObj[0] = "questions"
         print(currentObj)
 
-    session.add(str_to_class(currentObj[0])(*currentObj[1:]))
+    session.add(class_access(currentObj[0])(*currentObj[1:]))
     try:
         session.commit()
     except IntegrityError as err:
@@ -284,3 +290,16 @@ def createObj(currentObj):
         return print('error')
     return currentObj
 
+for line in Lines:
+    for entity in entities:
+        if "---" in line:
+            if len(currentObj) > 0:
+                print(objectcreation(currentObj))
+            currentObj.clear()
+
+    if not(line == '\n'):
+        if len(currentObj) == 0:
+            currentObj.append(line)
+        else:
+            currentObj.append(line.replace('\n', '').replace('"', '').split('=', 1)[1])
+   
