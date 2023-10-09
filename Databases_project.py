@@ -1,4 +1,4 @@
-from sqlalchemy import create_engine, ForeignKey, Column, String, Integer, Boolean, DateTime 
+from sqlalchemy import create_engine, ForeignKey, Column, String, Integer, Boolean, DateTime, Float
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.exc import IntegrityError
@@ -155,7 +155,7 @@ class NPC(Base):
     id = Column("id", Integer, primary_key = True)
     name = Column("name",String)
     type = Column("type",String)
-    location = Column("location",float)
+    location = Column("location",Float)
     dialogue = Column("dialogue",String,ForeignKey("dialogue.id"))
     quest = Column("quest",Integer,ForeignKey("quest.id"))
 
@@ -229,7 +229,7 @@ class Transaction(Base):
     receiver_id = Column("receiver_id",Integer)
     amount = Column("amount",Integer)
     description = Column("description",String)
-    timestamp = Column("timestamp", DateTime, default = datetime.uctnow)
+    timestamp = Column("timestamp", DateTime, default = datetime.utcnow)
 
     def __init__(self,id,sender_id,reciever_id,amount,description,timestamp):
         self.id = id
