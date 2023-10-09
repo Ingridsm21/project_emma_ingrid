@@ -13,8 +13,8 @@ class Dialogue(Base):
     __tablename__ = "dialogue"
 
     id = Column("id", Integer, primary_key = True)
-    npc_id = Column("npc_id",Integer )
-    player_id = Column("player_id", Integer)
+    npc_id = Column("npc_id",Integer,ForeignKey("npc.id"))
+    player_id = Column("player_id", Integer,ForeignKey("player.id"))
     text = Column("text", String )
 
     def __init__(self,id,npc_id,player_id,text):
@@ -30,7 +30,7 @@ class Guild(Base):
     id = Column("id", Integer, primary_key = True)
     name = Column("name",String)
     max_members = Column("max_members", Integer)
-    leader_id = Column("leader_id", Integer )
+    leader_id = Column("leader_id", Integer,ForeignKey("player.id"))
     members = Column("members", Integer )
     founded_year = Column("founded_year", Integer )
 
@@ -51,9 +51,9 @@ class Player(Base):
     first_name = Column("first_name",String )
     last_name = Column("last_name", String)
     class_name = Column("class_name", String )
-    guild_id = Column("guild_id", String)
+    guild_id = Column("guild_id", String,ForeignKey("guild.id"))
     last_login = Column("last_login", DateTime)
-    kingdom_id = Column("kingdom_id",Integer)
+    kingdom_id = Column("kingdom_id",Integer,ForeignKey("kingdom.id"))
     experience = Column("experience",Integer)
     health = Column("health",Integer)
     level = Column("level",Integer)
@@ -78,7 +78,7 @@ class Item(Base):
     __tablename__ = "item"
 
     id = Column("id", Integer, primary_key = True)
-    name = Column("name",Integer)
+    name = Column("name",String)
     description = Column("description",String)
     price = Column("price",Integer)
     required_level = Column("required_level",Integer)
@@ -103,7 +103,7 @@ class Enemy(Base):
     health = Column("health",Integer)
     attack = Column("attack",Integer)
     defense = Column("defense",Integer)
-    drop_items = Column("drop_items",String)
+    drop_items = Column("drop_items",String,ForeignKey("item.id"))
 
     def __init__(self,id,name,type,level,health,attack,defense,drop_items):
         self.id = id
@@ -121,9 +121,9 @@ class Team(Base):
 
     id = Column("id", Integer, primary_key = True)
     name = Column("name",String)
-    leader_id = Column("leader_id",Integer)
+    leader_id = Column("leader_id",Integer, ForeignKey("player.id"))
     member_count = Column("member_count",Integer)
-    kingdom_id = Column("kingdom_id",Integer)
+    kingdom_id = Column("kingdom_id",Integer,ForeignKey("kingdom.id"))
 
     def __init__(self,id,name,leader_id,memeber_count,kingdom_id):
         self.id = id
@@ -156,8 +156,8 @@ class NPC(Base):
     name = Column("name",String)
     type = Column("type",String)
     location = Column("location",float)
-    dialogue = Column("dialogue",String)
-    quest = Column("quest",Integer)
+    dialogue = Column("dialogue",String,ForeignKey("dialogue.id"))
+    quest = Column("quest",Integer,ForeignKey("quest.id"))
 
     def __init__(self,id,name,type,location,dialogue,quest):
         self.id = id
@@ -175,7 +175,7 @@ class Kingdom(Base):
     id = Column("id", Integer, primary_key = True)
     name = Column("name",String)
     description = Column("description",String)
-    ruler_id = Column("ruler_id",Integer)
+    ruler_id = Column("ruler_id",Integer,ForeignKey("ruler.id"))
     population = Column("population",Integer)
 
     def __init__(self,id,name,description,ruler_id,population):
@@ -193,7 +193,7 @@ class Ruler(Base):
     id = Column("id", Integer, primary_key = True)
     name = Column("name",String)
     title = Column("title",String)
-    kingdom_id = Column("kingdom_id",Integer)
+    kingdom_id = Column("kingdom_id",Integer,ForeignKey("kingdom.id"))
 
     def __init__(self,id,name,title,kingdom_id):
         self.id = id
@@ -207,8 +207,8 @@ class Combat(Base):
     __tablename__ = "combat"
 
     id = Column("id", Integer, primary_key = True)
-    player_id = Column("player_id",Integer)
-    enemy_id = Column("enemy_id",Integer)
+    player_id = Column("player_id",Integer,ForeignKey("player.id"))
+    enemy_id = Column("enemy_id",Integer,ForeignKey("player.id"))
     turns = Column("turns",Integer)
     winner_id = Column("winner_id",Integer)
 
@@ -248,7 +248,7 @@ class Quest(Base):
     name = Column("name",String)
     description = Column("description",String)
     reward = Column("reward",String)
-    player_id = Column("player_id",Integer)
+    player_id = Column("player_id",Integer,ForeignKey("kingdom.id"))
     difficulty = Column("difficulty",Integer)
 
 
