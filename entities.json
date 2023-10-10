@@ -39,19 +39,19 @@
                     "value_source": "guild_names"
                 },
                 {
-                    "name": "max_members",
-                    "datatype": "int"
-                },
-                {
                     "name": "leader_id",
                     "datatype": "int"
                 },
                 {
-                    "name": "members",
-                    "datatype": "int"
+                    "name": "founded_date",
+                    "datatype": "datetime"
                 },
                 {
-                    "name": "founded_year",
+                    "name": "members",
+                    "datatype": "String"
+                },
+                {
+                    "name": "max_members",
                     "datatype": "int"
                 }
             ]
@@ -76,14 +76,13 @@
                     "value_source": "last_names"
                 },
                 {
-                    "name": "class_name", 
+                    "name": "class", 
                     "datatype": "string",
                     "value_source": "class_names"
                 },
                 {
                     "name": "guild_id",
-                    "datatype": "string",
-                    "value_source": "guild_names"
+                    "datatype": "int"
                 },
                 {
                     "name": "last_login",
@@ -141,7 +140,7 @@
                 },
                 {
                     "name": "consumable", 
-                    "datatype": "boolean" 
+                    "datatype": "int" 
                 }
             ]
         },
@@ -233,7 +232,7 @@
                     "datatype": "string"
                 },
                 {
-                    "name": "event_time",
+                    "name": "event_date",
                     "datatype": "datetime"
                 }
             ]
@@ -259,7 +258,7 @@
                 },
                 {
                     "name": "location",
-                    "datatype": "float"
+                    "datatype": "string"
                 },
                 {
                     "name": "dialogue",
