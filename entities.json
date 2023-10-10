@@ -76,7 +76,7 @@
                     "value_source": "last_names"
                 },
                 {
-                    "name": "class", 
+                    "name": "class_name", 
                     "datatype": "string",
                     "value_source": "class_names"
                 },

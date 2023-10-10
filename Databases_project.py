@@ -1,4 +1,4 @@
-from sqlalchemy import create_engine, ForeignKey, Column, String, Integer, DateTime, Float
+from sqlalchemy import create_engine, ForeignKey, Column, String, Integer, DateTime
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.exc import IntegrityError
@@ -31,8 +31,8 @@ class Guild(Base):
     name = Column("name",String)
     leader_id = Column("leader_id", Integer)#,ForeignKey("player.id"))
     members = Column("members", Integer )
-    founded_date = Column("founded_date", Integer)
-    max_members = Column("max_members", Integer)
+    founded_date = Column("founded_date", Integer, nullable = True)
+    max_members = Column("max_members", Integer, nullable=True)
     
 
 
@@ -140,7 +140,7 @@ class Event(Base):
     id = Column("id", Integer, primary_key = True)
     name = Column("name",String)
     description = Column("description",String)
-    event_time = Column("event_time", DateTime)
+    event_time = Column("event_date", DateTime)
 
     def __init__(self,id,name,description,event_time):
         self.id = id
@@ -269,7 +269,6 @@ session = Session()
 
 file = open('generated_entities.txt')
 Lines = file.readlines()
-
 entities = ["player", "event", "item", "enemy", "team", "npc", "guild", "dialogue","kingdom","ruler","combat","transaction","quest"]
 currentObj = []
 
@@ -292,10 +291,7 @@ def objectcreation(currentObj):
     return currentObj
 
 for line in Lines:
-    print(line)
     for entity in entities:
-        print(entity)
-        print(currentObj)
         if "---" in line:
             if len(currentObj) > 0:
                 print(objectcreation(currentObj))  
@@ -305,8 +301,9 @@ for line in Lines:
         if len(currentObj) == 0:
             currentObj.append(line)
         else:
-            if 'null' in line:
-                currentObj.append(line.replace('\n', '').replace('"', '').split('=', 1)[1])
-                
-            currentObj.append(line.replace('\n', '').replace('"', '').split('=', 1)[1])
-    
+            
+            cleaned = line.replace('\n', '').replace('"', '').split('=', 1)[1]
+            if cleaned == "null":
+                cleaned = None
+            currentObj.append(cleaned)
+            print(currentObj)
