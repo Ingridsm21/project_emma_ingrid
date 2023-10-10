@@ -270,7 +270,7 @@ session = Session()
 file = open('generated_entities.txt')
 Lines = file.readlines()
 
-entities = ["player", "event", "item", "enemy", "team", "npc", "guild", "team", "dialogue","kingdom","ruler","combat","transaction","quest"]
+entities = ["player", "event", "item", "enemy", "team", "npc", "guild", "dialogue","kingdom","ruler","combat","transaction","quest"]
 currentObj = []
 
 def class_access(classname):
@@ -292,19 +292,21 @@ def objectcreation(currentObj):
     return currentObj
 
 for line in Lines:
+    print(line)
     for entity in entities:
+        print(entity)
+        print(currentObj)
         if "---" in line:
             if len(currentObj) > 0:
-                if currentObj[0] == "guild":
-                    currentObj[4] = int(currentObj[4])  # Convierte members a entero
-                    if currentObj[5].strip() == 'null':
-                        currentObj[5] = None  # Asigna None a founded_date si es 'null'
-                print(objectcreation(currentObj))
+                print(objectcreation(currentObj))  
             currentObj.clear()
 
     if not(line == '\n'):
         if len(currentObj) == 0:
             currentObj.append(line)
         else:
+            if 'null' in line:
+                currentObj.append(line.replace('\n', '').replace('"', '').split('=', 1)[1])
+                
             currentObj.append(line.replace('\n', '').replace('"', '').split('=', 1)[1])
-   
+    

@@ -266,7 +266,7 @@
                     "value_source":"dialogues"
                 },
                 {
-                    "name": "quest",
+                    "name": "quest_id",
                     "datatype": "int"
                 }
             ]
