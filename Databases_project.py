@@ -5,6 +5,7 @@ from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import sessionmaker
 from datetime import datetime
 import sys
+#from client import 
 
 
 Base = declarative_base()
@@ -335,4 +336,12 @@ for line in Lines:
             if cleaned == "null":
                 cleaned = None
             currentObj.append(cleaned)
-            print(currentObj)
+
+data_insert = ["chat",106, "Richard","Hi"]
+
+for data in data_insert:
+    if data == "chat":
+        find_id = data_insert[1]
+        chat_query = session.query(Chat).filter(Chat.id  == find_id).first()
+        print("PRUEBA")
+        print(chat_query)
