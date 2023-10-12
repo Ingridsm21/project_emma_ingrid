@@ -410,6 +410,48 @@
                     "datatype": "int"
                 }
             ]
+        },
+        {
+            "name": "Groupchat",
+            "type": "groupchat",
+            "fields": [
+                {
+                    "name": "id",
+                    "datatype": "int",
+                    "type": "primary_key"
+                },
+                {
+                    "name": "name",
+                    "datatype": "string"
+                }
+            ]
+        },
+        {
+            "name": "Chat",
+            "type": "chat",
+            "fields": [
+                {
+                    "name": "id",
+                    "datatype": "int",
+                    "type": "primary_key"
+                },
+                {
+                    "name": "sender_id",
+                    "datatype": "int"
+                },
+                {
+                    "name": "receiver_id",
+                    "datatype": "int"
+                },
+                {
+                    "name": "timestamp",
+                    "datatype": "datetime"
+                },
+                {
+                    "name": "content",
+                    "datatype": "String"
+                }
+            ]
         }
     ]
 }

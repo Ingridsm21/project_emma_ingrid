@@ -261,6 +261,35 @@ class Quest(Base):
         self.player_id = player_id
         self.difficulty = difficulty
 
+
+class Groupchat(Base):
+    __tablename__ = "groupchat"
+
+    id = Column("id", Integer, primary_key = True)
+    name = Column("name",String)
+
+
+    def __init__(self,id,name):
+        self.id = id
+        self.name = name
+
+class Chat(Base):
+    __tablename__ = "chat"
+
+    id = Column("id", Integer, primary_key = True)
+    sender_id = Column("sender_id", Integer)
+    receiver_id = Column("receiver_id", Integer)
+    timestamp = Column("timestamp", DateTime)
+    content = Column("content", String)
+
+
+    def __init__(self,id,sender_id,receiver_id,timestamp,content):
+        self.id = id
+        self.sender_id = sender_id
+        self.receiver_id = receiver_id
+        self.timestamp = timestamp
+        self.content = content
+
 engine = create_engine("mysql://root:Techsoft21_@localhost:3306/project_mysticquest") #Cambiar
 Base.metadata.create_all(bind = engine)
 
@@ -269,7 +298,7 @@ session = Session()
 
 file = open('generated_entities.txt')
 Lines = file.readlines()
-entities = ["player", "event", "item", "enemy", "team", "npc", "guild", "dialogue","kingdom","ruler","combat","transaction","quest"]
+entities = ["player", "event", "item", "enemy", "team", "npc", "guild", "dialogue","kingdom","ruler","combat","transaction","quest","groupchat","chat"]
 currentObj = []
 
 def class_access(classname):
