@@ -12,6 +12,7 @@ server.listen()
 
 clients = [] #store id of players that will interact in the chat
 nicknames = [] #store names of the members of the chat
+data = []  #store the data for the database in the way [message, sender]
 
 #Function to send a message to all clients in the server
 #parameter message: the message to be sent
@@ -27,6 +28,10 @@ def handle(client):
         try:
             message = client.recv(1024)
             broadcast(message)
+            interaction = [message,client]
+            data.append(interaction)
+            print(interaction)
+
         except:
             index = clients.index(client)
             clients.remove(client)
@@ -56,6 +61,7 @@ def receive():
         #Now we implement threads to handle all clients roughly at the same time
         thread = threading.Thread(target=handle,args=(client,))
         thread.start()
+        
     
 
 #run the main method
