@@ -48,7 +48,8 @@
                 },
                 {
                     "name": "members",
-                    "datatype": "String"
+                    "datatype": "String",
+                    "value_source":"first_names"
                 },
                 {
                     "name": "max_members",
@@ -181,7 +182,8 @@
                 },
                 {
                     "name": "drop_items",
-                    "datatype": "string"
+                    "datatype": "string",
+                    "value_source":"item_types"
                 }
             ]
         },
@@ -258,7 +260,8 @@
                 },
                 {
                     "name": "location",
-                    "datatype": "string"
+                    "datatype": "string",
+                    "value_source":"kingdom_names"
                 },
                 {
                     "name": "dialogue",
@@ -310,7 +313,8 @@
                 },
                 {
                     "name": "name",
-                    "datatype": "string"
+                    "datatype": "string",
+                    "value_source":"first_names"
                 },
                 {
                     "name": "title",

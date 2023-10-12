@@ -337,11 +337,28 @@ for line in Lines:
                 cleaned = None
             currentObj.append(cleaned)
 
-data_insert = ["chat",106, "Richard","Hi"]
+data_insert = ["chat","Hi,prueba","Richard",106]
 
-for data in data_insert:
-    if data == "chat":
-        find_id = data_insert[1]
-        chat_query = session.query(Chat).filter(Chat.id  == find_id).first()
-        print("PRUEBA")
-        print(chat_query)
+def insert_message():
+    for data in data_insert:
+        if data == "chat":
+            find_id = data_insert[-1]
+            chat_query = session.query(Chat).filter(Chat.id  == find_id).first()
+            if chat_query:
+                chat_query.sender_id = data_insert[-1]
+                chat_query.content = data_insert[1]
+            else:
+                new_row = Chat(
+                    id = find_id,
+                    sender_id = data_insert[1],
+                    #receiver_id =   ,
+                    #timestamp =     ,
+                    content = data_insert[-1]
+                )
+                session.add(new_row)
+                session.commit
+        else:
+            print("Groupchat")
+
+
+
