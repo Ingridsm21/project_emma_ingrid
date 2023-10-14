@@ -5,7 +5,7 @@ from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import sessionmaker
 from datetime import datetime
 import sys
-#from client import 
+from server import data
 
 
 Base = declarative_base()
@@ -296,9 +296,6 @@ def class_access(classname):
 
 def objectcreation(currentObj):
     currentObj[0] = currentObj[0].replace('-', '').replace(' ', '').replace('\n', '')
-    """if "questions" in currentObj[0]:
-        currentObj[0] = "questions"
-        print(currentObj)"""
 
     session.add(class_access(currentObj[0])(*currentObj[1:]))
     try:
@@ -324,29 +321,36 @@ for line in Lines:
             if cleaned == "null":
                 cleaned = None
             currentObj.append(cleaned)
-"""
-data_insert = ["chat","Hi,prueba","Richard",106]
 
-def insert_message():
+
+
+def insert_message(data_insert):
     for data in data_insert:
-        if data == "chat":
-            find_id = data_insert[-1]
+        entity, message_d, name_d, id_d = data
+        if entity == "chat":
+            find_id = id_d
             chat_query = session.query(Chat).filter(Chat.id  == find_id).first()
             if chat_query:
-                chat_query.sender_id = data_insert[-1]
-                chat_query.content = data_insert[1]
+                chat_query.sender_id = id_d
+                chat_query.name = name_d
+                chat_query.message = message_d
             else:
                 new_row = Chat(
                     id = find_id,
-                    sender_id = data_insert[1],
-                    #receiver_id =   ,
-                    #timestamp =     ,
-                    content = data_insert[-1]
+                    sender_id = id_d,
+                    name =  name_d,
+                    message = message_d
                 )
                 session.add(new_row)
-                session.commit
+
+            try:
+                session.commit()
+            except IntegrityError as err:
+                session.rollback()
+                print("Error")
         else:
             print("Groupchat")
 
+#data_insert = [["chat","Hi,prueba","Richard",2],["chat","Ns","Carmen",1]]
+insert_message(data)
 
-"""
