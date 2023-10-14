@@ -13,7 +13,7 @@ Base = declarative_base()
 class Dialogue(Base):
     __tablename__ = "dialogue"
 
-    id = Column("id", Integer, primary_key = True, autoincrement=True)
+    id = Column("id", Integer, primary_key = True, autoincrement = True)
     npc_id = Column("npc_id",Integer, ForeignKey("npc.id"))
     player_id = Column("player_id", Integer, ForeignKey("player.id"))
     text = Column("text", String )
@@ -28,9 +28,9 @@ class Dialogue(Base):
 class Guild(Base):
     __tablename__ = "guild"
 
-    id = Column("id", Integer, primary_key = True,autoincrement=True)
+    id = Column("id", Integer, primary_key = True,autoincrement = True)
     name = Column("name",String, unique = True)
-    leader_id = Column("leader_id", Integer, ForeignKey("player.id"),unique = True)
+    leader_id = Column("leader_id", Integer, ForeignKey("player.id"))#,unique = True)
     founded_date = Column("founded_date", DateTime, nullable = True)
     members = Column("members", Integer )
     
@@ -60,9 +60,9 @@ class Player(Base):
     level = Column("level",Integer)
     gold = Column("gold",Integer)
 
-    __table_args__ = (
+    """__table_args__ = (
        UniqueConstraint('first_name', 'last_name', name='uq_first_name_last_name'),
-   )
+   )"""
 
     def __init__(self,id,first_name,last_name,class_name,guild_id,last_login,kingdom_id,experience,health,level,gold):
         self.id = id
@@ -82,7 +82,7 @@ class Item(Base):
     __tablename__ = "item"
 
     id = Column("id", Integer, primary_key = True,autoincrement=True)
-    name = Column("name",String, unique = True)
+    name = Column("name",String)#, unique = True)
     description = Column("description",String)
     price = Column("price",Integer)
     required_level = Column("required_level",Integer)
@@ -99,7 +99,7 @@ class Enemy(Base):
     __tablename__ = "enemy"
 
     id = Column("id", Integer, primary_key = True,autoincrement=True)
-    name = Column("name",String,unique =True)
+    name = Column("name",String)#,unique =True)
     type = Column("type",String)
     level = Column("level",Integer)
     health = Column("health",Integer)
@@ -122,7 +122,7 @@ class Team(Base):
     __tablename__ = "team"
 
     id = Column("id", Integer, primary_key = True, autoincrement=True)
-    name = Column("name",String, unique = True)
+    name = Column("name",String)#, unique = True)
     leader_id = Column("leader_id",Integer, ForeignKey("player.id"))
     member_count = Column("member_count",Integer)
     kingdom_id = Column("kingdom_id",Integer, ForeignKey("kingdom.id"))
@@ -173,7 +173,7 @@ class Kingdom(Base):
     __tablename__ = "kingdom"
 
     id = Column("id", Integer, primary_key = True, autoincrement=True)
-    name = Column("name",String, unique=True)
+    name = Column("name",String)#, unique=True)
     ruler_id = Column("ruler_id",Integer, ForeignKey("ruler.id"))
     population = Column("population",Integer)
 
@@ -296,9 +296,9 @@ def class_access(classname):
 
 def objectcreation(currentObj):
     currentObj[0] = currentObj[0].replace('-', '').replace(' ', '').replace('\n', '')
-    if "questions" in currentObj[0]:
+    """if "questions" in currentObj[0]:
         currentObj[0] = "questions"
-        print(currentObj)
+        print(currentObj)"""
 
     session.add(class_access(currentObj[0])(*currentObj[1:]))
     try:
