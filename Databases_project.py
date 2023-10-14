@@ -1,4 +1,4 @@
-from sqlalchemy import create_engine, ForeignKey, Column, String, Integer, DateTime
+from sqlalchemy import UniqueConstraint, create_engine, ForeignKey, Column, String, Integer, DateTime
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.exc import IntegrityError
@@ -13,9 +13,9 @@ Base = declarative_base()
 class Dialogue(Base):
     __tablename__ = "dialogue"
 
-    id = Column("id", Integer, primary_key = True)
-    npc_id = Column("npc_id",Integer)#,ForeignKey("npc.id"))
-    player_id = Column("player_id", Integer)#,ForeignKey("player.id"))
+    id = Column("id", Integer, primary_key = True, autoincrement=True)
+    npc_id = Column("npc_id",Integer, ForeignKey("npc.id"))
+    player_id = Column("player_id", Integer, ForeignKey("player.id"))
     text = Column("text", String )
 
     def __init__(self,id,npc_id,player_id,text):
@@ -28,39 +28,41 @@ class Dialogue(Base):
 class Guild(Base):
     __tablename__ = "guild"
 
-    id = Column("id", Integer, primary_key = True)
-    name = Column("name",String)
-    leader_id = Column("leader_id", Integer)#,ForeignKey("player.id"))
+    id = Column("id", Integer, primary_key = True,autoincrement=True)
+    name = Column("name",String, unique = True)
+    leader_id = Column("leader_id", Integer, ForeignKey("player.id"),unique = True)
+    founded_date = Column("founded_date", DateTime, nullable = True)
     members = Column("members", Integer )
-    founded_date = Column("founded_date", Integer, nullable = True)
-    max_members = Column("max_members", Integer, nullable=True)
     
 
 
-    def __init__(self,id,name,leader_id,members,founded_date,max_members):
+    def __init__(self,id,name,leader_id,founded_date,members):
         self.id = id
         self.name = name
         self.leader_id = leader_id
-        self.members = members
         self.founded_date = founded_date
-        self.max_members = max_members
+        self.members = members
+        
 
 
 class Player(Base):
     __tablename__ = "player"
 
-    id = Column("id", Integer, primary_key = True)
+    id = Column("id", Integer, primary_key = True,autoincrement=True)
     first_name = Column("first_name",String )
     last_name = Column("last_name", String)
     class_name = Column("class_name", String )
-    guild_id = Column("guild_id", Integer)#,ForeignKey("guild.id"))
+    guild_id = Column("guild_id", Integer, ForeignKey("guild.id"))
     last_login = Column("last_login", DateTime)
-    kingdom_id = Column("kingdom_id",Integer)#,ForeignKey("kingdom.id"))
+    kingdom_id = Column("kingdom_id",Integer, ForeignKey("kingdom.id"))
     experience = Column("experience",Integer)
     health = Column("health",Integer)
     level = Column("level",Integer)
     gold = Column("gold",Integer)
 
+    __table_args__ = (
+       UniqueConstraint('first_name', 'last_name', name='uq_first_name_last_name'),
+   )
 
     def __init__(self,id,first_name,last_name,class_name,guild_id,last_login,kingdom_id,experience,health,level,gold):
         self.id = id
@@ -79,33 +81,31 @@ class Player(Base):
 class Item(Base):
     __tablename__ = "item"
 
-    id = Column("id", Integer, primary_key = True)
-    name = Column("name",String)
+    id = Column("id", Integer, primary_key = True,autoincrement=True)
+    name = Column("name",String, unique = True)
     description = Column("description",String)
     price = Column("price",Integer)
     required_level = Column("required_level",Integer)
-    consumable = Column("consumable", Integer) 
 
-    def __init__(self,id,name,description,price,required_level,consumable):
+    def __init__(self,id,name,description,price,required_level):
         self.id = id
         self.name = name 
         self.description = description
         self.price = price
         self.required_level = required_level
-        self.consumable = consumable
 
 
 class Enemy(Base):
     __tablename__ = "enemy"
 
-    id = Column("id", Integer, primary_key = True)
-    name = Column("name",String)
+    id = Column("id", Integer, primary_key = True,autoincrement=True)
+    name = Column("name",String,unique =True)
     type = Column("type",String)
     level = Column("level",Integer)
     health = Column("health",Integer)
     attack = Column("attack",Integer)
     defense = Column("defense",Integer)
-    drop_items = Column("drop_items",String)#,ForeignKey("item.id"))
+    drop_items = Column("drop_items",Integer, ForeignKey("item.id"))
 
     def __init__(self,id,name,type,level,health,attack,defense,drop_items):
         self.id = id
@@ -121,11 +121,11 @@ class Enemy(Base):
 class Team(Base):
     __tablename__ = "team"
 
-    id = Column("id", Integer, primary_key = True)
-    name = Column("name",String)
-    leader_id = Column("leader_id",Integer)#, ForeignKey("player.id"))
+    id = Column("id", Integer, primary_key = True, autoincrement=True)
+    name = Column("name",String, unique = True)
+    leader_id = Column("leader_id",Integer, ForeignKey("player.id"))
     member_count = Column("member_count",Integer)
-    kingdom_id = Column("kingdom_id",Integer)#,ForeignKey("kingdom.id"))
+    kingdom_id = Column("kingdom_id",Integer, ForeignKey("kingdom.id"))
 
     def __init__(self,id,name,leader_id,memeber_count,kingdom_id):
         self.id = id
@@ -138,52 +138,48 @@ class Team(Base):
 class Event(Base):
     __tablename__ = "event"
 
-    id = Column("id", Integer, primary_key = True)
+    id = Column("id", Integer, primary_key = True, autoincrement=True)
     name = Column("name",String)
-    description = Column("description",String)
-    event_time = Column("event_date", DateTime)
+    event_date = Column("event_date", DateTime)
 
-    def __init__(self,id,name,description,event_time):
+    def __init__(self,id,name,event_date):
         self.id = id
         self.name = name 
-        self.description = description
-        self.event_time = event_time
+        self.event_date = event_date
 
 
 
 class NPC(Base):
     __tablename__ = "npc"
 
-    id = Column("id", Integer, primary_key = True)
+    id = Column("id", Integer, primary_key = True, autoincrement=True)
     name = Column("name",String)
     type = Column("type",String)
     location = Column("location",String)
-    dialogue = Column("dialogue",String)#,ForeignKey("dialogue.id"))
-    quest = Column("quest_id",Integer)#,ForeignKey("quest.id"))
+    dialogue_id = Column("dialogue_id",String, ForeignKey("dialogue.id"))
+    quest_id = Column("quest_id",Integer, ForeignKey("quest.id"))
 
-    def __init__(self,id,name,type,location,dialogue,quest):
+    def __init__(self,id,name,type,location,dialogue_id,quest_id):
         self.id = id
         self.name = name 
         self.type = type
         self.location = location
-        self.dialogue = dialogue
-        self.quest = quest
+        self.dialogue_id = dialogue_id
+        self.quest_id = quest_id
 
 
 
 class Kingdom(Base):
     __tablename__ = "kingdom"
 
-    id = Column("id", Integer, primary_key = True)
-    name = Column("name",String)
-    description = Column("description",String)
-    ruler_id = Column("ruler_id",Integer)#,ForeignKey("ruler.id"))
+    id = Column("id", Integer, primary_key = True, autoincrement=True)
+    name = Column("name",String, unique=True)
+    ruler_id = Column("ruler_id",Integer, ForeignKey("ruler.id"))
     population = Column("population",Integer)
 
-    def __init__(self,id,name,description,ruler_id,population):
+    def __init__(self,id,name,ruler_id ,population):
         self.id = id
         self.name = name 
-        self.description = description
         self.ruler_id = ruler_id
         self.population = population
 
@@ -192,15 +188,13 @@ class Kingdom(Base):
 class Ruler(Base):
     __tablename__ = "ruler"
 
-    id = Column("id", Integer, primary_key = True)
+    id = Column("id", Integer, primary_key = True, autoincrement=True)
     name = Column("name",String)
-    title = Column("title",String)
-    kingdom_id = Column("kingdom_id",Integer)#,ForeignKey("kingdom.id"))
+    kingdom_id = Column("kingdom_id",Integer, ForeignKey("kingdom.id"))
 
-    def __init__(self,id,name,title,kingdom_id):
+    def __init__(self,id,name,kingdom_id):
         self.id = id
         self.name = name 
-        self.title = title
         self.kingdom_id = kingdom_id
 
 
@@ -208,9 +202,9 @@ class Ruler(Base):
 class Combat(Base):
     __tablename__ = "combat"
 
-    id = Column("id", Integer, primary_key = True)
-    player_id = Column("player_id",Integer)#,ForeignKey("player.id"))
-    enemy_id = Column("enemy_id",Integer)#,ForeignKey("player.id"))
+    id = Column("id", Integer, primary_key = True,autoincrement = True)
+    player_id = Column("player_id",Integer, ForeignKey("player.id"))
+    enemy_id = Column("enemy_id",Integer, ForeignKey("player.id"))
     turns = Column("turns",Integer)
     winner_id = Column("winner_id",Integer)
 
@@ -226,19 +220,17 @@ class Combat(Base):
 class Transaction(Base):
     __tablename__ = "transaction"
 
-    id = Column("id", Integer, primary_key = True)
+    id = Column("id", Integer, primary_key = True, autoincrement=True)
     sender_id = Column("sender_id",Integer)
     receiver_id = Column("receiver_id",Integer)
     amount = Column("amount",Integer)
-    description = Column("description",String)
     timestamp = Column("timestamp", DateTime, default = datetime.utcnow)
 
-    def __init__(self,id,sender_id,reciever_id,amount,description,timestamp):
+    def __init__(self,id,sender_id,reciever_id,amount,timestamp):
         self.id = id
         self.sender_id = sender_id
         self.receiver_id = reciever_id
         self.amount = amount
-        self.description = description
         self.timestamp = timestamp
 
 
@@ -246,18 +238,16 @@ class Transaction(Base):
 class Quest(Base):
     __tablename__ = "quest"
 
-    id = Column("id", Integer, primary_key = True)
+    id = Column("id", Integer, primary_key = True, autoincrement=True)
     name = Column("name",String)
-    description = Column("description",String)
     reward = Column("reward",String)
-    player_id = Column("player_id",Integer)#,ForeignKey("kingdom.id"))
+    player_id = Column("player_id",Integer, ForeignKey("player.id"))
     difficulty = Column("difficulty",Integer)
 
 
-    def __init__(self,id,name,description,reward,player_id,difficulty):
+    def __init__(self,id,name,reward,player_id,difficulty):
         self.id = id
         self.name = name
-        self.description = description
         self.reward = reward
         self.player_id = player_id
         self.difficulty = difficulty
@@ -266,7 +256,7 @@ class Quest(Base):
 class Groupchat(Base):
     __tablename__ = "groupchat"
 
-    id = Column("id", Integer, primary_key = True)
+    id = Column("id", Integer, primary_key = True, autoincrement=True)
     name = Column("name",String)
 
 
@@ -277,19 +267,17 @@ class Groupchat(Base):
 class Chat(Base):
     __tablename__ = "chat"
 
-    id = Column("id", Integer, primary_key = True)
+    id = Column("id", Integer, primary_key = True, autoincrement=True)
     sender_id = Column("sender_id", Integer)
-    receiver_id = Column("receiver_id", Integer)
-    timestamp = Column("timestamp", DateTime)
-    content = Column("content", String)
+    name = Column("name", String)
+    message = Column("message", String)
 
 
-    def __init__(self,id,sender_id,receiver_id,timestamp,content):
+    def __init__(self,id,sender_id,name,message):
         self.id = id
         self.sender_id = sender_id
-        self.receiver_id = receiver_id
-        self.timestamp = timestamp
-        self.content = content
+        self.name = name
+        self.message = message
 
 engine = create_engine("mysql://root:Techsoft21_@localhost:3306/project_mysticquest") #Cambiar
 Base.metadata.create_all(bind = engine)
@@ -336,7 +324,7 @@ for line in Lines:
             if cleaned == "null":
                 cleaned = None
             currentObj.append(cleaned)
-
+"""
 data_insert = ["chat","Hi,prueba","Richard",106]
 
 def insert_message():
@@ -361,4 +349,4 @@ def insert_message():
             print("Groupchat")
 
 
-
+"""

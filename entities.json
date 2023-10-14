@@ -48,11 +48,6 @@
                 },
                 {
                     "name": "members",
-                    "datatype": "String",
-                    "value_source":"first_names"
-                },
-                {
-                    "name": "max_members",
                     "datatype": "int"
                 }
             ]
@@ -138,10 +133,6 @@
                 {
                     "name": "required_level",
                     "datatype": "int"
-                },
-                {
-                    "name": "consumable", 
-                    "datatype": "int" 
                 }
             ]
         },
@@ -182,8 +173,7 @@
                 },
                 {
                     "name": "drop_items",
-                    "datatype": "string",
-                    "value_source":"item_types"
+                    "datatype": "int"
                 }
             ]
         },
@@ -230,10 +220,6 @@
                     "value_source": "event_names"
                 },
                 {
-                    "name": "description",
-                    "datatype": "string"
-                },
-                {
                     "name": "event_date",
                     "datatype": "datetime"
                 }
@@ -264,9 +250,8 @@
                     "value_source":"kingdom_names"
                 },
                 {
-                    "name": "dialogue",
-                    "datatype": "string",
-                    "value_source":"dialogues"
+                    "name": "dialogue_id",
+                    "datatype": "int"
                 },
                 {
                     "name": "quest_id",
@@ -287,10 +272,6 @@
                     "name": "name",
                     "datatype": "string",
                     "value_source": "kingdom_names"
-                },
-                {
-                    "name": "description",
-                    "datatype": "string"
                 },
                 {
                     "name": "ruler_id",
@@ -315,10 +296,6 @@
                     "name": "name",
                     "datatype": "string",
                     "value_source":"first_names"
-                },
-                {
-                    "name": "title",
-                    "datatype": "string"
                 },
                 {
                     "name": "kingdom_id",
@@ -375,12 +352,8 @@
                     "datatype": "int"
                 },
                 {
-                    "name": "description",
-                    "datatype": "string"
-                },
-                {
                     "name": "timestamp",
-                    "datatype": "timestamp"
+                    "datatype": "datetime"
                 }
             ]
         },
@@ -395,15 +368,13 @@
                 },
                 {
                     "name": "name",
-                    "datatype": "string"
-                },
-                {
-                    "name": "description",
-                    "datatype": "string"
+                    "datatype": "string",
+                    "value_source":"first_names"
                 },
                 {
                     "name": "reward",
-                    "datatype": "string"
+                    "datatype": "string",
+                    "value_source":"item_types"
                 },
                 {
                     "name": "player_id",
@@ -426,7 +397,8 @@
                 },
                 {
                     "name": "name",
-                    "datatype": "string"
+                    "datatype": "string",
+                    "value_source":"first_names"
                 }
             ]
         },
@@ -444,15 +416,12 @@
                     "datatype": "int"
                 },
                 {
-                    "name": "receiver_id",
-                    "datatype": "int"
+                    "name": "name",
+                    "datatype": "String",
+                    "value_source":"first_names"
                 },
                 {
-                    "name": "timestamp",
-                    "datatype": "datetime"
-                },
-                {
-                    "name": "content",
+                    "name": "message",
                     "datatype": "String"
                 }
             ]
