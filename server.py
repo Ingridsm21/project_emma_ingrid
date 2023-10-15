@@ -1,6 +1,8 @@
 import threading
 import socket
 
+#from Databases_project import insert_message
+
 host = '127.0.0.1' #localhost
 port = 55555 #use a solid common port
 
@@ -64,8 +66,9 @@ def receive():
         #Now we implement threads to handle all clients roughly at the same time
         thread = threading.Thread(target=handle,args=(client,))
         thread.start()
+    
 
- #method to retrieve the data of the chat as a list of [message,name,id]  
+#method to retrieve the data of the chat as a list of [message,name,id]  
 def exportData():
     return data
 

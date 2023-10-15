@@ -5,7 +5,7 @@ from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import sessionmaker
 from datetime import datetime
 import sys
-from server import data
+#from server import data
 
 
 Base = declarative_base()
@@ -323,7 +323,7 @@ for line in Lines:
             currentObj.append(cleaned)
 
 
-
+"""
 def insert_message(data_insert):
     for data in data_insert:
         entity, message_d, name_d, id_d = data
@@ -352,5 +352,5 @@ def insert_message(data_insert):
             print("Groupchat")
 
 #data_insert = [["chat","Hi,prueba","Richard",2],["chat","Ns","Carmen",1]]
-insert_message(data)
+insert_message(data)"""
 
