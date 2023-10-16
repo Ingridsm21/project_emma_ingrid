@@ -76,3 +76,4 @@ def exportData():
 print("server is working")
 receive()
 
+server.close()
