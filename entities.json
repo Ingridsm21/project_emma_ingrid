@@ -398,7 +398,7 @@
                 },
                 {
                     "name": "completition_tijme",
-                    "datatype": "datetime"
+                    "datatype": "int"
                 }
             ]
         },
