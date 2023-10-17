@@ -385,8 +385,7 @@
                 },
                 {
                     "name": "reward",
-                    "datatype": "string",
-                    "value_source":"item_types"
+                    "datatype": "int"
                 },
                 {
                     "name": "player_id",
