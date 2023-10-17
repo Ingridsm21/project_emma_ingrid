@@ -81,6 +81,10 @@
                     "datatype": "int"
                 },
                 {
+                    "name": "item_id",
+                    "datatype": "int"
+                },
+                {
                     "name": "last_login",
                     "datatype": "datetime"
                 },
@@ -348,6 +352,14 @@
                     "datatype": "int"
                 },
                 {
+                    "name": "item_id",
+                    "datatype": "int"
+                },
+                {
+                    "name": "kingdom_id",
+                    "datatype": "int"
+                },
+                {
                     "name": "amount",
                     "datatype": "int"
                 },
@@ -383,6 +395,10 @@
                 {
                     "name": "difficulty",
                     "datatype": "int"
+                },
+                {
+                    "name": "completition_tijme",
+                    "datatype": "datetime"
                 }
             ]
         },
