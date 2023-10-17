@@ -5,7 +5,7 @@ from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import sessionmaker
 from datetime import datetime
 import sys
-#from server import data
+from server import exportData
 
 
 Base = declarative_base()
@@ -28,7 +28,7 @@ class Dialogue(Base):
 class Guild(Base):
     __tablename__ = "guild"
 
-    id = Column("id", Integer, primary_key = True,autoincrement = True)
+    id = Column("id", Integer, primary_key = True, autoincrement = True)
     name = Column("name",String, unique = True)
     leader_id = Column("leader_id", Integer, ForeignKey("player.id"))#,unique = True)
     founded_date = Column("founded_date", DateTime, nullable = True)
@@ -53,7 +53,7 @@ class Player(Base):
     last_name = Column("last_name", String)
     class_name = Column("class_name", String )
     guild_id = Column("guild_id", Integer, ForeignKey("guild.id"))
-    item_id = Column("item_id",Integer,  ForeignKey("item.id"))
+    item_id = Column("item_id", Integer)
     last_login = Column("last_login", DateTime)
     kingdom_id = Column("kingdom_id",Integer, ForeignKey("kingdom.id"))
     experience = Column("experience",Integer)
@@ -225,18 +225,18 @@ class Transaction(Base):
     id = Column("id", Integer, primary_key = True, autoincrement=True)
     sender_id = Column("sender_id",Integer)
     receiver_id = Column("receiver_id",Integer)
-    item_id = Column("item_id", Integer)
-    kingdom_id = Column("kingdom_id", Integer)
+    item_id = Column("item_id",Integer) 
+    kingdom_id = Column("kingdom_id",Integer)
     amount = Column("amount",Integer)
     timestamp = Column("timestamp", DateTime, default = datetime.utcnow)
 
-    def __init__(self,id,sender_id,kingdom_id, item_id,reciever_id,amount,timestamp):
+    def __init__(self,id,sender_id,reciever_id,item_id,kingdom_id,amount,timestamp):
         self.id = id
         self.sender_id = sender_id
         self.receiver_id = reciever_id
-        self.amount = amount
-        self.kingdom_id = kingdom_id
         self.item_id = item_id
+        self.kingdom_id = kingdom_id
+        self.amount = amount
         self.timestamp = timestamp
 
 
@@ -249,16 +249,16 @@ class Quest(Base):
     reward = Column("reward",String)
     player_id = Column("player_id",Integer, ForeignKey("player.id"))
     difficulty = Column("difficulty",Integer)
-    completition_time = Column("completition_time", Integer)
+    completition_time = Column("completition_time",Integer)
 
 
-    def __init__(self,id,name,reward,completition_time,player_id,difficulty):
+    def __init__(self,id,name,reward,player_id,difficulty,completition_time):
         self.id = id
         self.name = name
         self.reward = reward
-        self.completition_time = completition_time
         self.player_id = player_id
         self.difficulty = difficulty
+        self.completition_time = completition_time
 
 
 class Groupchat(Base):
@@ -287,7 +287,7 @@ class Chat(Base):
         self.name = name
         self.message = message
 
-engine = create_engine("mysql://root:CR23acgt@localhost:3306/project_mysticquest") #Cambiar
+engine = create_engine("mysql://root:Techsoft21_@localhost:3306/project_mysticquest") #Cambiar
 Base.metadata.create_all(bind = engine)
 
 Session = sessionmaker(bind = engine)
@@ -342,6 +342,7 @@ def insert_message(data_insert):
                 chat_query.sender_id = id_d
                 chat_query.name = name_d
                 chat_query.message = message_d
+                print("funciona")
             else:
                 new_row = Chat(
                     id = find_id,
@@ -350,6 +351,7 @@ def insert_message(data_insert):
                     message = message_d
                 )
                 session.add(new_row)
+                print("funciona2")
 
             try:
                 session.commit()
@@ -359,6 +361,6 @@ def insert_message(data_insert):
         else:
             print("Groupchat")
 
-#data_insert = [["chat","Hi,prueba","Richard",2],["chat","Ns","Carmen",1]]
-insert_message(data)"""
+data_insert = exportData()
+insert_message(data_insert)"""
 

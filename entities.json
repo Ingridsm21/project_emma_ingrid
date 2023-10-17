@@ -397,7 +397,7 @@
                     "datatype": "int"
                 },
                 {
-                    "name": "completition_tijme",
+                    "name": "completition_time",
                     "datatype": "int"
                 }
             ]
