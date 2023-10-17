@@ -53,6 +53,7 @@ class Player(Base):
     last_name = Column("last_name", String)
     class_name = Column("class_name", String )
     guild_id = Column("guild_id", Integer, ForeignKey("guild.id"))
+    item_id = Column("item_id",Integer,  ForeignKey("item.id"))
     last_login = Column("last_login", DateTime)
     kingdom_id = Column("kingdom_id",Integer, ForeignKey("kingdom.id"))
     experience = Column("experience",Integer)
@@ -64,12 +65,13 @@ class Player(Base):
        UniqueConstraint('first_name', 'last_name', name='uq_first_name_last_name'),
    )"""
 
-    def __init__(self,id,first_name,last_name,class_name,guild_id,last_login,kingdom_id,experience,health,level,gold):
+    def __init__(self,id,first_name,last_name,class_name,guild_id,item_id,last_login,kingdom_id,experience,health,level,gold):
         self.id = id
         self.first_name = first_name
         self.last_name = last_name
         self.class_name = class_name
         self.guild_id = guild_id
+        self.item_id = item_id
         self.last_login = last_login
         self.kingdom_id = kingdom_id
         self.experience = experience
@@ -223,14 +225,18 @@ class Transaction(Base):
     id = Column("id", Integer, primary_key = True, autoincrement=True)
     sender_id = Column("sender_id",Integer)
     receiver_id = Column("receiver_id",Integer)
+    item_id = Column("item_id", Integer)
+    kingdom_id = Column("kingdom_id", Integer)
     amount = Column("amount",Integer)
     timestamp = Column("timestamp", DateTime, default = datetime.utcnow)
 
-    def __init__(self,id,sender_id,reciever_id,amount,timestamp):
+    def __init__(self,id,sender_id,kingdom_id, item_id,reciever_id,amount,timestamp):
         self.id = id
         self.sender_id = sender_id
         self.receiver_id = reciever_id
         self.amount = amount
+        self.kingdom_id = kingdom_id
+        self.item_id = item_id
         self.timestamp = timestamp
 
 
@@ -243,12 +249,14 @@ class Quest(Base):
     reward = Column("reward",String)
     player_id = Column("player_id",Integer, ForeignKey("player.id"))
     difficulty = Column("difficulty",Integer)
+    completition_time = Column("completition_time", Integer)
 
 
-    def __init__(self,id,name,reward,player_id,difficulty):
+    def __init__(self,id,name,reward,completition_time,player_id,difficulty):
         self.id = id
         self.name = name
         self.reward = reward
+        self.completition_time = completition_time
         self.player_id = player_id
         self.difficulty = difficulty
 
@@ -279,7 +287,7 @@ class Chat(Base):
         self.name = name
         self.message = message
 
-engine = create_engine("mysql://root:Techsoft21_@localhost:3306/project_mysticquest") #Cambiar
+engine = create_engine("mysql://root:CR23acgt@localhost:3306/project_mysticquest") #Cambiar
 Base.metadata.create_all(bind = engine)
 
 Session = sessionmaker(bind = engine)
