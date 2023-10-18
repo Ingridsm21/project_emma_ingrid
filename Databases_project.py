@@ -1,9 +1,10 @@
-from sqlalchemy import UniqueConstraint, create_engine, ForeignKey, Column, String, Integer, DateTime
+from sqlalchemy import CheckConstraint, UniqueConstraint, create_engine, ForeignKey, Column, String, Integer, DateTime
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import sessionmaker
 from datetime import datetime
+import random
 import sys
 #from server import exportData
 
@@ -13,10 +14,14 @@ Base = declarative_base()
 class Dialogue(Base):
     __tablename__ = "dialogue"
 
-    id = Column("id", Integer, primary_key = True, autoincrement = True)
+    id = Column("id", Integer, primary_key = True, autoincrement = True, server_default = "1")
     npc_id = Column("npc_id",Integer, ForeignKey("npc.id"))
     player_id = Column("player_id", Integer, ForeignKey("player.id"))
     text = Column("text", String )
+
+    __table_args__ = (
+        CheckConstraint('npc_id != player_id', name='check_npc_player_id'),
+    )
 
     def __init__(self,id,npc_id,player_id,text):
         self.id = id
@@ -28,13 +33,15 @@ class Dialogue(Base):
 class Guild(Base):
     __tablename__ = "guild"
 
-    id = Column("id", Integer, primary_key = True, autoincrement = True)
+    id = Column("id", Integer, primary_key = True, autoincrement = True, default = "1")
     name = Column("name",String, unique = True)
     leader_id = Column("leader_id", Integer, ForeignKey("player.id"),unique = True)
     founded_date = Column("founded_date", DateTime, nullable = True)
     members = Column("members", Integer )
     
-
+    __table_args__ = (
+            UniqueConstraint('name', name='uq_guild_name'),
+        )
 
     def __init__(self,id,name,leader_id,founded_date,members):
         self.id = id
@@ -48,7 +55,7 @@ class Guild(Base):
 class Player(Base):
     __tablename__ = "player"
 
-    id = Column("id", Integer, primary_key = True,autoincrement=True)
+    id = Column("id", Integer, primary_key = True,autoincrement=True, server_default = "1")
     first_name = Column("first_name",String )
     last_name = Column("last_name", String)
     class_name = Column("class_name", String )
@@ -83,7 +90,7 @@ class Player(Base):
 class Item(Base):
     __tablename__ = "item"
 
-    id = Column("id", Integer, primary_key = True,autoincrement=True)
+    id = Column("id", Integer, primary_key = True,autoincrement=True, server_default = "1")
     name = Column("name",String, unique = True)
     description = Column("description",String)
     price = Column("price",Integer)
@@ -100,7 +107,7 @@ class Item(Base):
 class Enemy(Base):
     __tablename__ = "enemy"
 
-    id = Column("id", Integer, primary_key = True,autoincrement=True)
+    id = Column("id", Integer, primary_key = True,autoincrement=True, server_default = "1")
     name = Column("name",String,unique =True)
     type = Column("type",String)
     level = Column("level",Integer)
@@ -123,7 +130,7 @@ class Enemy(Base):
 class Team(Base):
     __tablename__ = "team"
 
-    id = Column("id", Integer, primary_key = True, autoincrement=True)
+    id = Column("id", Integer, primary_key = True, autoincrement=True, server_default = "1")
     name = Column("name",String, unique = True)
     leader_id = Column("leader_id",Integer, ForeignKey("player.id"))
     member_count = Column("member_count",Integer)
@@ -140,9 +147,13 @@ class Team(Base):
 class Event(Base):
     __tablename__ = "event"
 
-    id = Column("id", Integer, primary_key = True, autoincrement=True)
-    name = Column("name",String)
+    id = Column("id", Integer, primary_key = True, autoincrement=True, server_default = "1")
+    name = Column("name",String, unique = True)
     event_date = Column("event_date", DateTime)
+
+    __table_args__ = (
+        UniqueConstraint('name', 'event_date'),  # Enforce unique name and event_date pairs
+    )
 
     def __init__(self,id,name,event_date):
         self.id = id
@@ -154,7 +165,7 @@ class Event(Base):
 class NPC(Base):
     __tablename__ = "npc"
 
-    id = Column("id", Integer, primary_key = True, autoincrement=True)
+    id = Column("id", Integer, primary_key = True, autoincrement=True, server_default = "1")
     name = Column("name",String)
     type = Column("type",String)
     location = Column("location",String)
@@ -174,7 +185,7 @@ class NPC(Base):
 class Kingdom(Base):
     __tablename__ = "kingdom"
 
-    id = Column("id", Integer, primary_key = True, autoincrement=True)
+    id = Column("id", Integer, primary_key = True, autoincrement=True, server_default = "1")
     name = Column("name",String, unique=True)
     ruler_id = Column("ruler_id",Integer, ForeignKey("ruler.id"))
     population = Column("population",Integer)
@@ -190,9 +201,9 @@ class Kingdom(Base):
 class Ruler(Base):
     __tablename__ = "ruler"
 
-    id = Column("id", Integer, primary_key = True, autoincrement=True)
+    id = Column("id", Integer, primary_key = True, autoincrement=True, server_default = "1")
     name = Column("name",String)
-    kingdom_id = Column("kingdom_id",Integer, ForeignKey("kingdom.id"))
+    kingdom_id = Column("kingdom_id",Integer, ForeignKey("kingdom.id"), unique =True)
 
     def __init__(self,id,name,kingdom_id):
         self.id = id
@@ -204,11 +215,16 @@ class Ruler(Base):
 class Combat(Base):
     __tablename__ = "combat"
 
-    id = Column("id", Integer, primary_key = True,autoincrement = True)
+    id = Column("id", Integer, primary_key = True,autoincrement = True, server_default = "1")
     player_id = Column("player_id",Integer, ForeignKey("player.id"))
     enemy_id = Column("enemy_id",Integer, ForeignKey("player.id"))
     turns = Column("turns",Integer)
     winner_id = Column("winner_id",Integer)
+
+    __table_args__ = (
+        CheckConstraint("winner_id IN (player_id, enemy_id)"),
+        UniqueConstraint('player_id', 'enemy_id'),  # Enforce unique player_id and enemy_id pairs
+    )
 
     def __init__(self,id,player_id,enemy_id,turns,winner_id):
         self.id = id
@@ -222,7 +238,7 @@ class Combat(Base):
 class Transaction(Base):
     __tablename__ = "transaction"
 
-    id = Column("id", Integer, primary_key = True, autoincrement=True)
+    id = Column("id", Integer, primary_key = True, autoincrement=True, server_default = "1")
     sender_id = Column("sender_id",Integer)
     receiver_id = Column("receiver_id",Integer)
     item_id = Column("item_id",Integer) 
@@ -230,6 +246,10 @@ class Transaction(Base):
     amount = Column("amount",Integer)
     timestamp = Column("timestamp", DateTime, default = datetime.utcnow)
 
+    __table_args__ = (
+        CheckConstraint("sender_id != receiver_id"),  # Ensure sender_id is not equal to receiver_id
+    )
+    
     def __init__(self,id,sender_id,reciever_id,item_id,kingdom_id,amount,timestamp):
         self.id = id
         self.sender_id = sender_id
@@ -244,7 +264,7 @@ class Transaction(Base):
 class Quest(Base):
     __tablename__ = "quest"
 
-    id = Column("id", Integer, primary_key = True, autoincrement=True)
+    id = Column("id", Integer, primary_key = True, autoincrement=True, server_default = "1")
     name = Column("name",String)
     reward = Column("reward",Integer)
     player_id = Column("player_id",Integer, ForeignKey("player.id"))
@@ -264,7 +284,7 @@ class Quest(Base):
 class Groupchat(Base):
     __tablename__ = "groupchat"
 
-    id = Column("id", Integer, primary_key = True, autoincrement=True)
+    id = Column("id", Integer, primary_key = True, autoincrement=True, server_default = "1")
     name = Column("name",String)
 
 
@@ -275,7 +295,7 @@ class Groupchat(Base):
 class Chat(Base):
     __tablename__ = "chat"
 
-    id = Column("id", Integer, primary_key = True, autoincrement=True)
+    id = Column("id", Integer, primary_key = True, autoincrement=True, server_default = "1")
     sender_id = Column("sender_id", Integer)
     name = Column("name", String)
     message = Column("message", String)
@@ -330,6 +350,70 @@ for line in Lines:
                 cleaned = None
             currentObj.append(cleaned)
 
+table_classes = [Kingdom, Player, Item, Enemy, Team, NPC, Guild, Dialogue, Ruler, Combat, Transaction, Quest, Groupchat, Chat]
+
+# Iterate through each table class and update the IDs
+for table_class in table_classes:
+    records = session.query(table_class).all()
+    for i, record in enumerate(records):
+        record.id = i + 1
+    session.commit()
+
+for table_class in table_classes:
+    records = session.query(table_class).all()
+    for record in records:
+        if hasattr(record, 'kingdom_id'):
+            record.kingdom_id = random.randint(1, 4)
+    session.commit()
+
+for table_class in table_classes:
+    records = session.query(table_class).all()
+    for record in records:
+        if hasattr(record, 'npc_id'):
+            record.npc_id = random.randint(1, 72)
+    session.commit()
+
+for table_class in table_classes:
+    records = session.query(table_class).all()
+    for record in records:
+        if hasattr(record, 'player_id'):
+            record.player_id = random.randint(1, 161)
+    session.commit()
+
+for table_class in table_classes:
+    records = session.query(table_class).all()
+    for record in records:
+        if hasattr(record, 'guild_id'):
+            record.guild_id = random.randint(1, 36)
+    session.commit()
+
+for table_class in table_classes:
+    records = session.query(table_class).all()
+    for record in records:
+        if hasattr(record, 'item_id'):
+            record.item_id = random.randint(1, 46)
+    session.commit()
+
+for table_class in table_classes:
+    records = session.query(table_class).all()
+    for record in records:
+        if hasattr(record, 'dialogue_id'):
+            record.dialogue_id = random.randint(1, 197)
+    session.commit()
+
+for table_class in table_classes:
+    records = session.query(table_class).all()
+    for record in records:
+        if hasattr(record, 'quest_id'):
+            record.quest_id = random.randint(1, 103)
+    session.commit()
+
+for table_class in table_classes:
+    records = session.query(table_class).all()
+    for record in records:
+        if hasattr(record, 'ruler_id'):
+            record.ruler_id = random.randint(1, 114)
+    session.commit()
 
 """
 def insert_message(data_insert):
