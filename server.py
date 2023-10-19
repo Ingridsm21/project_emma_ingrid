@@ -1,10 +1,18 @@
 import threading
+from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker
+from sqlalchemy.exc import IntegrityError
 import socket
 
 #from Databases_project import insert_message
 
 host = '127.0.0.1' #localhost
 port = 55555 #use a solid common port
+
+
+engine = create_engine("mysql://root:root@localhost:3306/Atheria")
+Session = sessionmaker(bind=engine)
+session = Session()
 
 server = socket.socket(socket.AF_INET,socket.SOCK_STREAM) #initialise a socket server
 
@@ -72,8 +80,40 @@ def receive():
 def exportData():
     return data
 
+
+
+def insert_message(data_insert):
+    for data in data_insert:
+        entity, message_d, name_d, id_d = data
+        if entity == "chat":
+            find_id = id_d
+            chat_query = session.query(Chat).filter(Chat.id  == find_id).first()
+            if chat_query:
+                chat_query.sender_id = id_d
+                chat_query.name = name_d
+                chat_query.message = message_d
+                print("funciona")
+            else:
+                new_row = Chat(
+                    id = find_id,
+                    sender_id = id_d,
+                    name =  name_d,
+                    message = message_d
+                )
+                session.add(new_row)
+                print("funciona2")
+
+            try:
+                session.commit()
+            except IntegrityError as err:
+                session.rollback()
+                print("Error")
+        else:
+            print("Groupchat")
+
+
 #run the main method
 print("server is working")
 receive()
-
+insert_message(exportData())
 server.close()
