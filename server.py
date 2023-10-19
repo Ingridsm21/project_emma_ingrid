@@ -4,13 +4,15 @@ from sqlalchemy.orm import sessionmaker
 from sqlalchemy.exc import IntegrityError
 import socket
 
+from Databases_project import Chat
+
 #from Databases_project import insert_message
 
 host = '127.0.0.1' #localhost
 port = 55555 #use a solid common port
 
 
-engine = create_engine("mysql://root:root@localhost:3306/Atheria")
+engine = create_engine("mysql://root:Techsoft21_@localhost:3306/project_mysticquest")
 Session = sessionmaker(bind=engine)
 session = Session()
 
@@ -27,21 +29,27 @@ data = []  #store the data for the database in the way [message, sender_name, se
 #Function to send a message to all clients in the server
 #parameter message: the message to be sent
 
-def broadcast(message):
+def broadcast(message,nickname):
+
+    data = Chat(name = nickname, message = message.decode('ascii'))
+    session.add(data)
     for client in clients:
         client.send(message)
 
 #function to handle a specific client at a time
 #parameter client: the client to handle by the server
-def handle(client):
+def handle(client,nickname):
     while True:
         try:
             message = client.recv(1024)
-            broadcast(message)
+            
 
             index = clients.index(client)
-            interaction = [message,client,index]
-            data.append(interaction)
+            broadcast(message,nickname)
+            #interaction = [message,client,index]
+            #data.append(interaction)
+
+
             #print(interaction)
             #print(exportData())
 
@@ -72,7 +80,7 @@ def receive():
         client.send('You are connected to the server'.encode('ascii'))
 
         #Now we implement threads to handle all clients roughly at the same time
-        thread = threading.Thread(target=handle,args=(client,))
+        thread = threading.Thread(target=handle,args=(client,nickname))
         thread.start()
     
 
@@ -81,7 +89,7 @@ def exportData():
     return data
 
 
-
+"""
 def insert_message(data_insert):
     for data in data_insert:
         entity, message_d, name_d, id_d = data
@@ -110,10 +118,10 @@ def insert_message(data_insert):
                 print("Error")
         else:
             print("Groupchat")
-
+"""
 
 #run the main method
 print("server is working")
 receive()
-insert_message(exportData())
+   #insert_message(exportData())
 server.close()

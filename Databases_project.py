@@ -424,36 +424,4 @@ for combat_entry in combat_entries:
 # Commit the updates
 session.commit()
 
-"""
-def insert_message(data_insert):
-    for data in data_insert:
-        entity, message_d, name_d, id_d = data
-        if entity == "chat":
-            find_id = id_d
-            chat_query = session.query(Chat).filter(Chat.id  == find_id).first()
-            if chat_query:
-                chat_query.sender_id = id_d
-                chat_query.name = name_d
-                chat_query.message = message_d
-                print("funciona")
-            else:
-                new_row = Chat(
-                    id = find_id,
-                    sender_id = id_d,
-                    name =  name_d,
-                    message = message_d
-                )
-                session.add(new_row)
-                print("funciona2")
-
-            try:
-                session.commit()
-            except IntegrityError as err:
-                session.rollback()
-                print("Error")
-        else:
-            print("Groupchat")
-
-data_insert = exportData()
-insert_message(data_insert) """
 
