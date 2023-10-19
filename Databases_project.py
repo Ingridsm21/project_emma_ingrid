@@ -415,6 +415,15 @@ for table_class in table_classes:
             record.ruler_id = random.randint(1, 114)
     session.commit()
 
+combat_entries = session.query(Combat).all()
+
+for combat_entry in combat_entries:
+    random_winner = random.choice([combat_entry.player_id, combat_entry.enemy_id])
+    combat_entry.winner_id = random_winner
+
+# Commit the updates
+session.commit()
+
 """
 def insert_message(data_insert):
     for data in data_insert:
