@@ -437,8 +437,7 @@
                 },
                 {
                     "name": "message",
-                    "datatype": "String",
-                    "value_source":"dialogues"
+                    "datatype": "String"
                 }
             ]
         }

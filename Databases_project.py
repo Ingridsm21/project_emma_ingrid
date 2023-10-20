@@ -9,6 +9,9 @@ import sys
 #from server import exportData
 
 
+# Emma and Ingrid
+#      and i6314966
+
 Base = declarative_base()
 
 class Dialogue(Base):

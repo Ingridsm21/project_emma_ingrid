@@ -4,9 +4,8 @@ from sqlalchemy.orm import sessionmaker
 from sqlalchemy.exc import IntegrityError
 import socket
 
-from Databases_project import Chat
 
-#from Databases_project import insert_message
+#from databases_project import Chat
 
 host = '127.0.0.1' #localhost
 port = 55555 #use a solid common port
@@ -29,20 +28,20 @@ data = []  #store the data for the database in the way [message, sender_name, se
 #Function to send a message to all clients in the server
 #parameter message: the message to be sent
 
-def broadcast(message,nickname):
+def broadcast(message):
     for client in clients:
         client.send(message)
 
 #function to handle a specific client at a time
 #parameter client: the client to handle by the server
-def handle(client,nickname):
+def handle(client):
     while True:
         try:
             message = client.recv(1024)
             
 
             index = clients.index(client)
-            broadcast(message,nickname)
+            broadcast(message)
             interaction = [message,client,index]
             data.append(interaction)
 
@@ -77,7 +76,7 @@ def receive():
         client.send('You are connected to the server'.encode('ascii'))
 
         #Now we implement threads to handle all clients roughly at the same time
-        thread = threading.Thread(target=handle,args=(client,nickname))
+        thread = threading.Thread(target=handle,args=(client,))
         thread.start()
     
 
@@ -86,7 +85,7 @@ def exportData():
     return data
 
 
-
+"""
 def insert_message(data_insert):
     for data in data_insert:
         entity, message_d, name_d, id_d = data
@@ -97,7 +96,6 @@ def insert_message(data_insert):
                 chat_query.sender_id = id_d
                 chat_query.name = name_d
                 chat_query.message = message_d
-                print("funciona")
             else:
                 new_row = Chat(
                     id = find_id,
@@ -106,7 +104,6 @@ def insert_message(data_insert):
                     message = message_d
                 )
                 session.add(new_row)
-                print("funciona2")
 
             try:
                 session.commit()
@@ -116,7 +113,7 @@ def insert_message(data_insert):
         else:
             print("Groupchat")
 
-
+"""
 #run the main method
 print("server is working")
 receive()
