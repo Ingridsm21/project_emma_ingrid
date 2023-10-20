@@ -30,9 +30,6 @@ data = []  #store the data for the database in the way [message, sender_name, se
 #parameter message: the message to be sent
 
 def broadcast(message,nickname):
-
-    data = Chat(name = nickname, message = message.decode('ascii'))
-    session.add(data)
     for client in clients:
         client.send(message)
 
@@ -46,8 +43,8 @@ def handle(client,nickname):
 
             index = clients.index(client)
             broadcast(message,nickname)
-            #interaction = [message,client,index]
-            #data.append(interaction)
+            interaction = [message,client,index]
+            data.append(interaction)
 
 
             #print(interaction)
@@ -89,7 +86,7 @@ def exportData():
     return data
 
 
-"""
+
 def insert_message(data_insert):
     for data in data_insert:
         entity, message_d, name_d, id_d = data
@@ -118,10 +115,9 @@ def insert_message(data_insert):
                 print("Error")
         else:
             print("Groupchat")
-"""
+
 
 #run the main method
 print("server is working")
 receive()
-   #insert_message(exportData())
 server.close()
